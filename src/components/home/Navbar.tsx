@@ -34,10 +34,10 @@ export default function Navbar() {
     >
       <nav className="container-px flex items-center justify-between gap-4">
         {/* Logo — natural aspect ratio, never cropped, on the white header */}
-        <Link href="/" aria-label="سوار البحرية" className="shrink-0">
+        <Link href="/" aria-label={locale === "en" ? "Sewar Marine" : "سوار البحرية"} className="shrink-0">
           <Image
             src={LOGO}
-            alt="شعار سوار البحرية"
+            alt={locale === "en" ? "Sewar Marine logo" : "شعار سوار البحرية"}
             priority
             className="h-12 w-auto sm:h-16"
           />
@@ -82,7 +82,7 @@ export default function Navbar() {
           </Link>
           <button
             type="button"
-            aria-label="القائمة"
+            aria-label={locale === "en" ? "Menu" : "القائمة"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
             className="flex h-11 w-11 items-center justify-center rounded-full border border-navy-100 text-navy-900 lg:hidden"

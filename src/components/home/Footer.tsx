@@ -9,8 +9,18 @@ import SocialIcon from "@/components/SocialIcon";
 import { useI18n } from "@/lib/i18n";
 import { useSettings, phoneHref } from "@/lib/settings";
 
+const SOCIAL_LABELS_EN: Record<string, string> = {
+  whatsapp: "WhatsApp",
+  instagram: "Instagram",
+  snapchat: "Snapchat",
+  tiktok: "TikTok",
+  telegram: "Telegram",
+  facebook: "Facebook",
+  youtube: "YouTube",
+};
+
 export default function Footer() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { socials: SOCIALS, phone, email, brand, brandEn } = useSettings();
   return (
     <footer
@@ -35,15 +45,15 @@ export default function Footer() {
         <div className="grid gap-12 pb-14 md:grid-cols-2 lg:grid-cols-3">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Image src={LOGO} alt="شعار سوار البحرية" className="h-20 w-auto sm:h-24" />
+            <Image src={LOGO} alt={locale === "en" ? "Sewar Marine logo" : "شعار سوار البحرية"} className="h-20 w-auto sm:h-24" />
             <p className="mt-5 leading-relaxed text-navy-900/60">{t("footer.brandDesc")}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               {SOCIALS.map((soc) => (
                 <a
                   key={soc.key}
                   href={soc.href}
-                  aria-label={soc.label}
-                  title={soc.label}
+                  aria-label={locale === "en" ? SOCIAL_LABELS_EN[soc.key] ?? soc.label : soc.label}
+                  title={locale === "en" ? SOCIAL_LABELS_EN[soc.key] ?? soc.label : soc.label}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-11 w-11 items-center justify-center rounded-full border border-navy-200 bg-navy-50 text-navy-700 transition-all hover:-translate-y-1 hover:border-gold-400 hover:text-gold-600"
@@ -96,7 +106,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-navy-100">
         <div className="container-px flex flex-col items-center justify-between gap-3 py-6 text-sm text-navy-900/55 sm:flex-row">
-          <p>© 2026 {brand} · {brandEn}. {t("footer.rights")}</p>
+          <p>© 2026 {locale === "en" ? brandEn : `${brand} · ${brandEn}`}. {t("footer.rights")}</p>
         </div>
       </div>
     </footer>

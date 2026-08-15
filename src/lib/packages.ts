@@ -202,7 +202,7 @@ export const PACKAGES: Pkg[] = [
     ],
     includes: [
       "🐬 مشاهدة الدلافين",
-      "🕐 4 ساعات كاملة",
+      "🕐 3 ساعات كاملة",
       "❄️ مياه شرب وثلج",
       "🥤 مشروبات غازية وعصيرات مشكلة — متاحة طوال الرحلة",
       "🥨 سناكات — متاحة طوال الرحلة",
@@ -255,18 +255,173 @@ type PkgI18nFields = {
   baseDuration: string;
 };
 
+type TierI18nFields = { name: string; note: string; items: string[] };
+type PkgDetailsI18n = {
+  yacht: string;
+  rows?: string[];
+  tiers?: TierI18nFields[];
+  addons?: Record<string, string>;
+  includes?: string[];
+  note?: string;
+};
+
 export const PKG_I18N: Record<string, PkgI18nFields> = {
-  swim: { title: "Swimming & Relaxation Trip", subtitle: "Thoul Sandy Island · Sewar Al-Bahr mini-yacht 31ft", unit: "SAR / trip", capacity: "5 persons · 4 hours", baseDuration: "4 hours" },
-  fish: { title: "Fishing Trips", subtitle: "Professional fishing experience · up to 5 persons", unit: "SAR / trip", capacity: "for 5 persons", baseDuration: "6 hours" },
-  hour: { title: "Hourly Trips", subtitle: "Flexible cruise · straight from the marina", unit: "SAR", capacity: "for 5 persons", baseDuration: "as chosen" },
-  party: { title: "Private Sea Parties", subtitle: "Make your occasion unforgettable on the Red Sea waves", unit: "SAR", capacity: "for 5 persons", baseDuration: "by package" },
-  dolphin: { title: "Dolphin Watching Trip", subtitle: "An unforgettable experience · watch dolphins in the Red Sea · 4 hours", unit: "SAR / trip", capacity: "for 5 persons", baseDuration: "4 hours" },
-  vip: { title: "Royal Fishing Experience — VIP All-Inclusive", subtitle: "Pro fishing + live cooking + luxury hospitality · 8 hours · Thoul sea", unit: "SAR", capacity: "for 5 persons · 8 hours", baseDuration: "8 hours" },
+  swim: { title: "Swimming & Relaxation Trip", subtitle: "Thoul Sandy Island · Sewar Al-Bahr mini-yacht, 31 ft", unit: "SAR / trip", capacity: "6 people · 4 hours", baseDuration: "4 hours" },
+  fish: { title: "Fishing Trips", subtitle: "Professional fishing experience · up to 6 people", unit: "SAR / trip", capacity: "For 6 people", baseDuration: "6 hours" },
+  hour: { title: "Hourly Trips", subtitle: "Flexible cruise · straight from the marina", unit: "SAR", capacity: "For 6 people", baseDuration: "Based on your selection" },
+  party: { title: "Private Sea Parties", subtitle: "Make your occasion unforgettable on the Red Sea", unit: "SAR", capacity: "For 6 people", baseDuration: "Based on the package" },
+  dolphin: { title: "Dolphin Watching Trip", subtitle: "An unforgettable Red Sea dolphin-watching experience · 3 morning hours", unit: "SAR / trip", capacity: "For 6 people", baseDuration: "3 hours" },
+  vip: { title: "Royal Fishing Experience — VIP All-Inclusive", subtitle: "Professional fishing + live cooking + luxury hospitality · 8 hours · Thoul waters", unit: "SAR", capacity: "For 6 people · 8 hours", baseDuration: "8 hours" },
+};
+
+const YACHT_FEATURES_EN =
+  "Capacity: up to 11 people · private bedroom · fully equipped kitchenette · bathroom · fresh water for washing and showering";
+
+export const PKG_DETAILS_I18N: Record<string, PkgDetailsI18n> = {
+  swim: {
+    yacht: YACHT_FEATURES_EN,
+    rows: ["Base price — 4 hours + drinks · up to 6 people + safety equipment"],
+    addons: {
+      extra_hour: "⏱️ Extra hour",
+      snacks: "🍉 Snacks and fruit",
+      fishing: "🎣 Fishing + fishing gear + bait",
+      kayak: "🛶 Kayak + two-person sunbed + sun float for up to 6 people",
+      photo: "📸 Professional photography",
+    },
+    includes: [
+      "🥤 Soft drinks and mixed juices — available throughout the trip",
+      "🥨 Snacks — available throughout the trip",
+    ],
+  },
+  fish: {
+    yacht: YACHT_FEATURES_EN,
+    rows: [
+      "🕕 6 hours — up to 6 people",
+      "🕗 8 hours — up to 6 people",
+      "🕙 10 hours — up to 6 people",
+      "🌅 12 hours — up to 6 people",
+    ],
+    addons: {
+      gear_rent: "🎣 Fishing gear + bait (rent from us)",
+      extra_hour: "⏱️ Extra hour",
+    },
+    includes: [
+      "❄️ Drinking water and ice",
+      "🥤 Soft drinks and mixed juices — available throughout the trip",
+      "🥨 Snacks — available throughout the trip",
+    ],
+    note: "Drinking water, ice, soft drinks, mixed juices and snacks are included with every package. Fishing gear and bait are optional: bring your own at no charge, or rent them from us for an additional SAR 329.",
+  },
+  hour: {
+    yacht: YACHT_FEATURES_EN,
+    rows: [
+      "🕧 30 minutes — up to 6 people",
+      "🕐 1 full hour — up to 6 people",
+      "🕑 2 hours — up to 6 people",
+    ],
+    includes: [
+      "🌊 Open-sea cruise",
+      "❄️ Drinking water and ice",
+      "🥤 Soft drinks and mixed juices — available throughout the trip",
+      "🥨 Snacks — available throughout the trip",
+      "🛟 Complete safety equipment",
+    ],
+  },
+  party: {
+    yacht: YACHT_FEATURES_EN,
+    tiers: [
+      {
+        name: "🥉 Bronze",
+        note: "For 6 people",
+        items: ["Boat decoration", "1-hour sea cruise"],
+      },
+      {
+        name: "🥈 Silver",
+        note: "For 6 people",
+        items: ["Boat decoration", "1.5-hour cruise", "Cake 🎂", "Flower bouquet 💐", "Drinks"],
+      },
+      {
+        name: "🥇 Gold",
+        note: "For 6 people",
+        items: ["Boat decoration", "2-hour cruise", "Cake 🎂", "Flower bouquet 💐", "Drinks", "Dinner for two 🍽️"],
+      },
+    ],
+    includes: [
+      "🚤 VIP-equipped boat",
+      "🎵 Music player and DJ speakers",
+      "🛋️ Comfortable seating",
+      "🥤 Soft drinks and mixed juices — available throughout the trip",
+      "🥨 Snacks — available throughout the trip",
+      "🔒 Complete privacy",
+    ],
+  },
+  dolphin: {
+    yacht: "Capacity: up to 10 people · private bedroom · fully equipped kitchenette · bathroom · fresh water for washing and showering",
+    rows: ["🌅 Morning trip — 9:00 AM to 12:00 PM"],
+    includes: [
+      "🐬 Dolphin watching",
+      "🕐 3 full hours",
+      "❄️ Drinking water and ice",
+      "🥤 Soft drinks and mixed juices — available throughout the trip",
+      "🥨 Snacks — available throughout the trip",
+      "🛟 Complete safety equipment",
+      "📍 Specialist marine guide",
+    ],
+  },
+  vip: {
+    yacht: YACHT_FEATURES_EN,
+    includes: [
+      "🕗 8 full hours",
+      "🎣 Complete fishing gear",
+      "🐟 Fishing bait",
+      "📦 Fish cooler",
+      "🍳 Your catch cooked live",
+      "❄️ Drinking water and ice",
+      "🥤 Soft drinks and mixed juices — available throughout the trip",
+      "🥨 Snacks — available throughout the trip",
+      "☕ Premium tea and coffee",
+      "🛟 Complete safety equipment",
+    ],
+    note: "Enjoy a luxury sea experience combining professional fishing with live cooking in the heart of Thoul's waters. We take you to the best fishing spots, then turn your catch into a fresh seafood meal prepared in front of you. Each additional person above 6 costs SAR 131.",
+  },
 };
 
 export function pkgText(locale: Locale, pkg: Pkg, field: keyof PkgI18nFields): string {
   if (locale === "en") return PKG_I18N[pkg.id]?.[field] ?? (pkg[field] as string);
   return pkg[field] as string;
+}
+
+export function pkgYachtText(locale: Locale, pkg: Pkg): string {
+  return locale === "en" ? PKG_DETAILS_I18N[pkg.id]?.yacht ?? pkg.yacht : pkg.yacht;
+}
+
+export function pkgRowText(locale: Locale, pkg: Pkg, index: number): string {
+  return locale === "en" ? PKG_DETAILS_I18N[pkg.id]?.rows?.[index] ?? pkg.rows?.[index]?.label ?? "" : pkg.rows?.[index]?.label ?? "";
+}
+
+export function pkgTierText(locale: Locale, pkg: Pkg, index: number, field: "name" | "note"): string {
+  const tier = pkg.tiers?.[index];
+  if (!tier) return "";
+  return locale === "en" ? PKG_DETAILS_I18N[pkg.id]?.tiers?.[index]?.[field] ?? tier[field] : tier[field];
+}
+
+export function pkgTierItemText(locale: Locale, pkg: Pkg, tierIndex: number, itemIndex: number): string {
+  const item = pkg.tiers?.[tierIndex]?.items[itemIndex] ?? "";
+  return locale === "en" ? PKG_DETAILS_I18N[pkg.id]?.tiers?.[tierIndex]?.items[itemIndex] ?? item : item;
+}
+
+export function pkgAddonText(locale: Locale, pkg: Pkg, addon: Addon): string {
+  return locale === "en" ? PKG_DETAILS_I18N[pkg.id]?.addons?.[addon.id] ?? addon.label : addon.label;
+}
+
+export function pkgIncludeText(locale: Locale, pkg: Pkg, index: number): string {
+  const item = pkg.includes?.[index] ?? "";
+  return locale === "en" ? PKG_DETAILS_I18N[pkg.id]?.includes?.[index] ?? item : item;
+}
+
+export function pkgNoteText(locale: Locale, pkg: Pkg): string {
+  if (!pkg.note) return "";
+  return locale === "en" ? PKG_DETAILS_I18N[pkg.id]?.note ?? pkg.note : pkg.note;
 }
 
 // Derive trip duration (hours) from packageId + selected option label.
