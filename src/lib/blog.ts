@@ -2476,7 +2476,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { label: "هيئة السياحة السعودية – Visit Saudi", href: "https://www.visitsaudi.com/ar", external: true },
       { label: "جدة على ويكيبيديا", href: "https://ar.wikipedia.org/wiki/جدة", external: true },
     ],
-  },,
+  },
 
   {
     "slug": "khareef-afdal-waqt-lirehla-bahriya-fi-thol",
