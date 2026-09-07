@@ -24,7 +24,250 @@ export type BlogPost = {
   references: LinkItem[]; // outbound links
 };
 
+type SeasonalSeed = {
+  slug: string;
+  keyphrase: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  audience: string;
+  activity: string;
+  timing: string;
+  packageInfo: string;
+  value: string;
+  preparation: string[];
+  related: LinkItem[];
+};
+
+function seasonalPost(seed: SeasonalSeed): BlogPost {
+  return {
+    slug: seed.slug,
+    keyphrase: seed.keyphrase,
+    title: seed.title,
+    excerpt: seed.excerpt,
+    category: seed.category,
+    date: "7 سبتمبر 2026",
+    isoDate: "2026-09-07",
+    readMinutes: 10,
+    coverAlt: seed.title + " مع سوار البحرية في ثول على البحر الأحمر",
+    intro:
+      seed.keyphrase + " خيار عملي لمن يريد كسر روتين الدراسة والعمل والاستفادة من هذه الفترة من السنة في تجربة قريبة ومنظمة. " +
+      "مع بداية الموسم الدراسي يصبح الوقت أكثر قيمة، ولذلك تساعدك سوار البحرية على اختيار مدة وباقة تناسب " + seed.audience +
+      " من دون انتظار إجازة طويلة أو التخطيط لسفر بعيد.",
+    sections: [
+      {
+        heading: "لماذا هذا الوقت مناسب لرحلة بحرية في ثول؟",
+        paragraphs: [
+          "دخول المدارس لا يعني انتهاء وقت الترفيه، بل يعني أن الرحلات الأقصر والأوضح أصبحت أكثر ملاءمة. " +
+          seed.timing + " يمنح المجموعة فرصة للاستمتاع بالبحر والعودة في اليوم نفسه مع وقت كافٍ للراحة والاستعداد للأسبوع.",
+          "ثول قريبة من جدة وتقدم تجربة بحرية مختلفة عن الخروجات المعتادة. عند تحديد الهدف مسبقاً—سباحة أو صيد أو مشاهدة دلافين أو جولة هادئة—يمكن بناء برنامج ممتع من دون ازدحام بالتفاصيل."
+        ],
+      },
+      {
+        heading: "التجربة والباقات المناسبة لهذه الفترة",
+        paragraphs: [
+          seed.activity + "، وهي تجربة يمكن ترتيبها حسب عدد الأشخاص والوقت المتاح. " + seed.packageInfo,
+          "الأسعار والمواعيد تخضع للتوفر وقد تتغير، لذلك يجب مراجعة صفحة الحجز وتأكيد السعر النهائي وما تشمله الباقة قبل الدفع. اختيار الباقة بناءً على الهدف والمدة أفضل من الاختيار بناءً على السعر وحده."
+        ],
+        list: [
+          "رحلة السباحة والاستجمام: 4 ساعات لـ6 أشخاص بسعر أساسي مدرج 1181 ريالاً.",
+          "رحلات الصيد: تبدأ من 1379 ريالاً للمدة الأساسية المدرجة.",
+          "رحلات بالساعة: تبدأ من 249 ريالاً لنصف ساعة وفق الأسعار الحالية.",
+          "مشاهدة الدلافين: 3 ساعات صباحية بسعر مدرج 1121 ريالاً.",
+          "الحفلات البحرية: تبدأ من 591 ريالاً حسب مستوى التجهيز.",
+          "الصيد الملكي VIP: 8 ساعات لـ6 أشخاص بسعر مدرج 3741 ريالاً."
+        ],
+      },
+      {
+        heading: "كيف تحصل على أفضل قيمة من الرحلة؟",
+        paragraphs: [
+          seed.value + " ابدأ بتحديد عدد الأشخاص والميزانية والمدة، ثم اتفق مع المجموعة على النشاط الأساسي قبل الحجز. بهذه الطريقة تقل الإضافات غير الضرورية ويصبح البرنامج أوضح.",
+          "الحجز المبكر مهم خصوصاً في عطلات نهاية الأسبوع وأوقات الغروب. أخبر فريق سوار بوجود أطفال أو كبار سن أو مناسبة خاصة حتى يساعدك في اختيار الوقت والتجهيز الأكثر راحة."
+        ],
+      },
+      {
+        heading: "التجهيز والسلامة قبل الانطلاق",
+        paragraphs: [
+          "جهز حقيبة خفيفة تحتوي على واقي شمس ومناشف وملابس جافة وهاتف مشحون وأي دواء شخصي تحتاجه. لا تحضر أغراضاً قابلة للكسر أو حقائب كبيرة تعيق الحركة داخل اليخت.",
+          "حالة البحر والطقس وتعليمات القبطان هي المرجع النهائي لمسار الرحلة وموعد السباحة أو النشاط. تعاون المجموعة مع الطاقم يجعل التجربة أكثر راحة وأماناً."
+        ],
+        list: seed.preparation,
+      },
+      {
+        heading: "احجز رحلتك مع سوار البحرية",
+        paragraphs: [
+          "اختر التاريخ وعدد الأشخاص والباقة المناسبة، ثم راجع مدة الرحلة والإضافات وسياسة الموعد. التنظيم المسبق يحول الساعات القليلة إلى تجربة متكاملة بدلاً من يوم عشوائي.",
+          "لا تؤجل البحر حتى الإجازة القادمة. احجز الآن واجعل هذه الفترة من السنة فرصة لذكرى جديدة مع العائلة أو الأصدقاء في ثول."
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "هل الرحلات البحرية مناسبة بعد دخول المدارس؟",
+        a: "نعم، خصوصاً رحلات نهاية الأسبوع والرحلات بالساعة التي تسمح بالعودة في اليوم نفسه دون التأثير على جدول الدراسة."
+      },
+      {
+        q: "كيف أختار الباقة المناسبة؟",
+        a: "حدد عدد الأشخاص والوقت والميزانية والنشاط الأساسي، ثم قارن الباقات وراجع السعر النهائي مع سوار قبل الحجز."
+      },
+      {
+        q: "هل يجب الحجز مبكراً؟",
+        a: "يفضل ذلك، لأن مواعيد نهاية الأسبوع والغروب والرحلات الصباحية قد تمتلئ، ولأن بعض التجهيزات تحتاج تنسيقاً مسبقاً."
+      }
+    ],
+    related: seed.related,
+    references: [
+      { label: "هيئة السياحة السعودية - Visit Saudi", href: "https://www.visitsaudi.com/ar", external: true },
+      { label: "المركز الوطني للأرصاد", href: "https://ncm.gov.sa", external: true }
+    ],
+  };
+}
+
+const SEASONAL_POSTS: BlogPost[] = [
+  seasonalPost({
+    slug: "rehlat-bahriya-baad-dokhool-almadaris-fi-thol",
+    keyphrase: "رحلات بحرية بعد دخول المدارس في ثول",
+    title: "رحلات بحرية بعد دخول المدارس في ثول: عطلة نهاية أسبوع مختلفة",
+    excerpt: "اكتشف رحلات بحرية بعد دخول المدارس في ثول لقضاء عطلة نهاية أسبوع قصيرة وممتعة مع العائلة أو الأصدقاء عبر باقات سوار البحرية.",
+    category: "موسم العودة للمدارس",
+    audience: "العائلات والأصدقاء",
+    activity: "يمكن اختيار السباحة والاستجمام أو جولة مرنة بالساعة أو رحلة صباحية",
+    timing: "اختيار صباح الجمعة أو السبت أو موعد قريب من الغروب",
+    packageInfo: "العائلة ذات الوقت المحدود قد تفضل الرحلات بالساعة، بينما تناسب باقة السباحة من يريد أربع ساعات على البحر.",
+    value: "لتحصل العائلة على يوم مريح بعد أسبوع الدراسة،",
+    preparation: ["حدد موعد العودة بما يناسب نوم الأطفال.", "أحضر ملابس احتياطية للأطفال.", "احجز مبكراً لعطلة نهاية الأسبوع."],
+    related: [{ label: "احجز رحلتك البحرية", href: "/booking" }, { label: "رحلة بحرية عائلية في ثول", href: "/blog/rehla-bahriya-aailiya" }, { label: "تواصل مع سوار", href: "/contact" }]
+  }),
+  seasonalPost({
+    slug: "afdal-rahla-bahriya-liltullab-fi-thol",
+    keyphrase: "أفضل رحلة بحرية للطلاب في ثول",
+    title: "أفضل رحلة بحرية للطلاب في ثول: أفكار لعطلة نهاية الأسبوع",
+    excerpt: "دليل اختيار أفضل رحلة بحرية للطلاب في ثول بعد بداية الدراسة: رحلات بالساعة وسباحة وتصوير وأنشطة جماعية مع سوار البحرية.",
+    category: "موسم العودة للمدارس",
+    audience: "مجموعات الطلاب والأصدقاء",
+    activity: "الجولة بالساعة مناسبة لتغيير الأجواء، بينما تمنح رحلة السباحة وقتاً أطول للأنشطة والتصوير",
+    timing: "جولة قصيرة في عطلة نهاية الأسبوع",
+    packageInfo: "تقسيم التكلفة بوضوح واختيار مدة مناسبة يساعدان المجموعة على الحجز دون تعقيد.",
+    value: "لتحافظ المجموعة على الميزانية وتستمتع بالوقت،",
+    preparation: ["اتفقوا على الميزانية قبل الحجز.", "حددوا نقطة ووقت التجمع.", "اجعلوا التصوير جزءاً من اليوم لا اليوم كله."],
+    related: [{ label: "شاهد الباقات", href: "/booking" }, { label: "رحلات بحرية للأصدقاء", href: "/blog/rehlat-bahriya-lilasdiqaa-fi-jeddah" }, { label: "رحلات بالساعة", href: "/blog/rehla-bahriya-bilsaa" }]
+  }),
+  seasonalPost({
+    slug: "rehla-qasira-qabl-alawda-lildirasah-fi-thol",
+    keyphrase: "رحلة بحرية قصيرة قبل العودة للدراسة في ثول",
+    title: "رحلة بحرية قصيرة قبل العودة للدراسة في ثول: ودّع الإجازة بذكرى",
+    excerpt: "خطط لرحلة بحرية قصيرة قبل العودة للدراسة في ثول واستمتع بالسباحة أو الغروب أو جولة بالساعة مع باقات سوار البحرية.",
+    category: "الإجازات والمواسم",
+    audience: "العائلة والأطفال",
+    activity: "يوم واحد قد يجمع السباحة والجلوس والتصوير من دون تكاليف وترتيبات سفر جديد",
+    timing: "موعد مبكر يترك وقتاً للعودة والنوم",
+    packageInfo: "يمكن اختيار رحلة بالساعة للبرنامج الخفيف أو رحلة السباحة والاستجمام لوقت أطول.",
+    value: "لإنهاء الإجازة بذكرى جميلة دون إرهاق،",
+    preparation: ["جهز مستلزمات المدرسة قبل يوم الرحلة.", "اختر برنامجاً غير مزدحم.", "اترك وقتاً للراحة بعد العودة."],
+    related: [{ label: "احجز الآن", href: "/booking" }, { label: "تجهيز شنطة الرحلة", href: "/blog/tajheez-shantat-alrehla-albahriya-fi-thol" }, { label: "رحلة السباحة", href: "/blog/rehlat-sibaha-fi-thol" }]
+  }),
+  seasonalPost({
+    slug: "rehlat-bahriya-fi-thol-september-2026",
+    keyphrase: "رحلات بحرية في ثول سبتمبر 2026",
+    title: "رحلات بحرية في ثول سبتمبر 2026: الباقات وأفضل أفكار البحر",
+    excerpt: "تعرف على رحلات بحرية في ثول سبتمبر 2026 وأفضل الباقات للعائلات والأصدقاء والأسعار المدرجة حالياً لدى سوار البحرية.",
+    category: "أسعار وعروض",
+    audience: "العائلات والأصدقاء والأزواج",
+    activity: "تتنوع الخيارات بين السباحة والصيد والدلافين والحفلات والجولات القصيرة",
+    timing: "موعد صباحي أو عطلة نهاية الأسبوع أو جلسة غروب",
+    packageInfo: "يعرض الموقع أسعاراً ومدداً متعددة، ويجب تأكيد التوفر والسعر النهائي لتاريخ سبتمبر المطلوب.",
+    value: "للاستفادة من سبتمبر قبل ازدحام جدول الموسم الدراسي،",
+    preparation: ["قارن المدة قبل مقارنة السعر.", "تأكد مما تشمله الباقة.", "راجع الطقس مع الفريق يوم الرحلة."],
+    related: [{ label: "راجع الأسعار واحجز", href: "/booking" }, { label: "كيف تختار الباقة؟", href: "/blog/kayf-takhtar-baqat-rehla-bahriya-fi-thol" }, { label: "أفضل وقت للبحر الأحمر", href: "/blog/afdal-waqt-lizyarat-albahr-alahmar" }]
+  }),
+  seasonalPost({
+    slug: "baqat-sewar-fi-mowsem-alawda-lildirasah",
+    keyphrase: "باقات سوار البحرية في موسم العودة للمدارس",
+    title: "باقات سوار البحرية في موسم العودة للمدارس: اختر تجربتك",
+    excerpt: "استعرض باقات سوار البحرية في موسم العودة للمدارس: السباحة والصيد والدلافين والرحلات بالساعة والحفلات والـVIP.",
+    category: "باقاتنا",
+    audience: "كل مجموعة بحسب وقتها وميزانيتها",
+    activity: "يمكن الاختيار بين تجربة قصيرة بالساعة أو يوم سباحة أو صيد أو مناسبة خاصة",
+    timing: "اختيار المدة التي لا تتعارض مع الدراسة والدوام",
+    packageInfo: "السباحة تبدأ من السعر الأساسي المدرج 1181 ريالاً، والصيد من 1379، والدلافين 1121، والحفلات من 591، والـVIP من 3741 ريالاً.",
+    value: "لاختيار باقة تحقق الهدف من دون إضافات غير لازمة،",
+    preparation: ["حدد النشاط الرئيسي.", "احسب عدد المشاركين بدقة.", "راجع الإضافات قبل الدفع."],
+    related: [{ label: "شاهد كل الباقات", href: "/booking" }, { label: "الصيد الملكي VIP", href: "/blog/rehlat-alsayd-almalakiya-vip" }, { label: "حفلات بحرية", href: "/blog/haflat-bahriya-fi-thol" }]
+  }),
+  seasonalPost({
+    slug: "rehla-sibaha-fi-thol-liotlat-nihayat-alusbou",
+    keyphrase: "رحلة سباحة في ثول لعطلة نهاية الأسبوع",
+    title: "رحلة سباحة في ثول لعطلة نهاية الأسبوع: يوم عائلي بعيداً عن الروتين",
+    excerpt: "خطط لرحلة سباحة في ثول لعطلة نهاية الأسبوع واستمتع بالجزيرة الرملية والجلوس على اليخت مع باقة سوار البحرية.",
+    category: "باقاتنا",
+    audience: "العائلات ومجموعات الأصدقاء",
+    activity: "أربع ساعات للسباحة والاستجمام والتصوير والجلوس على اليخت",
+    timing: "الانطلاق في وقت يسمح بالعودة والراحة قبل الأسبوع الجديد",
+    packageInfo: "السعر الأساسي المدرج 1181 ريالاً لـ6 أشخاص و4 ساعات مع مشروبات وسناكات وأدوات سلامة، إضافة إلى خيارات اختيارية.",
+    value: "لتحويل نهاية الأسبوع إلى يوم عائلي متوازن،",
+    preparation: ["أحضر مناشف وملابس جافة.", "راقب الأطفال طوال الوقت.", "لا تبدأ السباحة قبل توجيه القبطان."],
+    related: [{ label: "احجز رحلة السباحة", href: "/booking" }, { label: "رحلة بحرية عائلية", href: "/blog/rehla-bahriya-aailiya" }, { label: "تجهيز شنطة الرحلة", href: "/blog/tajheez-shantat-alrehla-albahriya-fi-thol" }]
+  }),
+  seasonalPost({
+    slug: "sayd-fi-thol-mawsim-alawda-lildirasah",
+    keyphrase: "صيد الأسماك في ثول في موسم العودة للمدارس",
+    title: "صيد الأسماك في ثول في موسم العودة للمدارس: تجربة نهاية أسبوع",
+    excerpt: "تعرف على صيد الأسماك في ثول في موسم العودة للمدارس واختر مدة الرحلة والمعدات المناسبة مع باقات سوار البحرية.",
+    category: "مغامرات الصيد",
+    audience: "عشاق الصيد والمبتدئين ومجموعات الأصدقاء",
+    activity: "تجربة تجمع الهدوء والتركيز والحماس والعمل الجماعي",
+    timing: "يوم عطلة يسمح بمدة صيد من 6 ساعات أو أكثر",
+    packageInfo: "تبدأ الباقة الأساسية المدرجة من 1379 ريالاً لـ6 ساعات حتى 6 أشخاص، مع خيارات 8 و10 و12 ساعة وإضافة للعدة والطُعم.",
+    value: "للاستمتاع بالصيد دون مفاجآت في الوقت أو التكلفة،",
+    preparation: ["حدد هل ستحضر عدتك أم تستأجرها.", "ارتدِ ملابس وقبعة مناسبة.", "اتبع تعليمات الطاقم عند استخدام السنارات."],
+    related: [{ label: "احجز رحلة الصيد", href: "/booking" }, { label: "دليل الصيد في البحر الأحمر", href: "/blog/sayd-alasmak-fi-albahr-alahmar" }, { label: "الصيد الملكي VIP", href: "/blog/rehlat-alsayd-almalakiya-vip" }]
+  }),
+  seasonalPost({
+    slug: "mushahadat-aldalafin-fi-thol-nihayat-alusbou",
+    keyphrase: "مشاهدة الدلافين في ثول في عطلة نهاية الأسبوع",
+    title: "مشاهدة الدلافين في ثول في عطلة نهاية الأسبوع: رحلة صباحية",
+    excerpt: "خطط لرحلة مشاهدة الدلافين في ثول في عطلة نهاية الأسبوع واستمتع بتجربة صباحية منظمة مع سوار البحرية.",
+    category: "تجارب بحرية",
+    audience: "العائلات والأطفال والأصدقاء",
+    activity: "ثلاث ساعات صباحية لمراقبة الحياة البحرية والاستمتاع بالجولة",
+    timing: "البرنامج المدرج من 9 صباحاً إلى 12 ظهراً",
+    packageInfo: "السعر المدرج 1121 ريالاً حتى 6 أشخاص، مع مياه ومشروبات وسناكات وأدوات سلامة ومرشد بحري.",
+    value: "لتحصل العائلة على تجربة تعليمية وترفيهية،",
+    preparation: ["احضر منظاراً إن توفر.", "لا تحاول لمس الدلافين.", "تذكر أن ظهور الكائنات البرية لا يمكن ضمانه."],
+    related: [{ label: "احجز رحلة الدلافين", href: "/booking" }, { label: "دليل مشاهدة الدلافين", href: "/blog/rehlat-mushahadat-aldalafin" }, { label: "أنشطة بحرية", href: "/blog/anshita-bahriya-fi-jeddah" }]
+  }),
+  seasonalPost({
+    slug: "rehlat-bahriya-bilsaa-fi-mawsim-almadaris",
+    keyphrase: "رحلات بحرية بالساعة في ثول مع بداية الدراسة",
+    title: "رحلات بحرية بالساعة في ثول مع بداية الدراسة: استمتع دون يوم كامل",
+    excerpt: "تعرف على رحلات بحرية بالساعة في ثول مع بداية الدراسة واختر مدة قصيرة تناسب العائلة أو الأصدقاء مع سوار البحرية.",
+    category: "باقاتنا",
+    audience: "من لديه جدول دراسي أو عملي مزدحم",
+    activity: "جولة مرنة للتصوير أو الغروب أو جلسة قهوة أو احتفال بسيط",
+    timing: "نصف ساعة أو ساعة أو ساعتان حسب الاختيار",
+    packageInfo: "الأسعار المدرجة 249 ريالاً لنصف ساعة و374 لساعة و749 لساعتين حتى 6 أشخاص، مع اختلاف السعر عند زيادة العدد.",
+    value: "للحصول على جرعة بحرية سريعة بأقل تعقيد،",
+    preparation: ["اختر هدفاً واحداً للجولة القصيرة.", "صل إلى المرسى مبكراً.", "أكد وقت العودة قبل الانطلاق."],
+    related: [{ label: "احجز رحلة بالساعة", href: "/booking" }, { label: "دليل الرحلات بالساعة", href: "/blog/rehla-bahriya-bilsaa" }, { label: "رحلة غروب", href: "/blog/rehlat-ghuroob-bahriya-fi-thol" }]
+  }),
+  seasonalPost({
+    slug: "hafla-bahriya-qabl-almadaris-fi-thol",
+    keyphrase: "حفلة بحرية قبل بداية المدارس في ثول",
+    title: "حفلة بحرية قبل بداية المدارس في ثول: احتفال خاص ينهي الإجازة",
+    excerpt: "نظم حفلة بحرية قبل بداية المدارس في ثول مع الزينة والكيكة والورود والخصوصية عبر باقات سوار البحرية.",
+    category: "مناسبات خاصة",
+    audience: "العائلات والأصدقاء وأصحاب المناسبات",
+    activity: "احتفال خاص على اليخت لعيد ميلاد أو اجتماع عائلي أو وداع الإجازة",
+    timing: "موعد مبكر يناسب الأطفال أو جولة قريبة من الغروب",
+    packageInfo: "تبدأ الباقة البرونزية المدرجة من 591 ريالاً، مع مستويات فضية وذهبية قد تشمل كيكة ووروداً ومشروبات وعشاء حسب الخيار.",
+    value: "لإقامة مناسبة مرتبة من دون تكاليف قاعة كبيرة،",
+    preparation: ["أرسل تفاصيل الديكور مبكراً.", "حدد عدد الضيوف بدقة.", "اختر طعاماً بسيطاً لا يعوق الحركة."],
+    related: [{ label: "احجز حفلتك البحرية", href: "/booking" }, { label: "عيد ميلاد على اليخت", href: "/blog/eid-milad-ala-alyacht-fi-thol" }, { label: "حفلات بحرية في ثول", href: "/blog/haflat-bahriya-fi-thol" }]
+  })
+];
+
 export const BLOG_POSTS: BlogPost[] = [
+  ...SEASONAL_POSTS,
   {
     slug: "tajheez-shantat-alrehla-albahriya-fi-thol",
     keyphrase: "تجهيز شنطة الرحلة البحرية في ثول",
@@ -3029,6 +3272,17 @@ export const BLOG_I18N: Record<string, BlogI18nFields> = {
   "tajeer-qarib-fi-jeddah": { title: "Boat Rental in Jeddah: Prices, Options & Best Sailing Spots 2026", excerpt: "A guide to boat rental in Jeddah on the Red Sea: prices, options, boat capacity, best sailing spots near Thoul and booking tips with Sewar Marine.", category: "Marine Guides" },
   "eid-milad-ala-alyacht-fi-thol": { title: "Birthday on a Yacht in Thoul: An Unforgettable Sea Celebration", excerpt: "Host a birthday on a yacht in Thoul with Sewar Marine: celebration packages, decoration and cake, privacy and prices for a special sea surprise.", category: "Our Packages" },
   "anshita-bahriya-fi-jeddah": { title: "Marine Activities in Jeddah: A Guide to the Best Red Sea Experiences", excerpt: "A guide to marine activities in Jeddah and Thoul on the Red Sea: swimming, snorkeling, fishing, dolphin watching and parties with Sewar Marine.", category: "Travel Guides" },
+
+  "rehlat-bahriya-baad-dokhool-almadaris-fi-thol": { title: "Sea Trips in Thoul After Back to School: A Different Weekend", excerpt: "Plan a short family or friends sea trip in Thoul after school starts with Sewar Marine packages.", category: "Back-to-School Season" },
+  "afdal-rahla-bahriya-liltullab-fi-thol": { title: "Best Sea Trip for Students in Thoul: Weekend Ideas", excerpt: "Choose a flexible student sea trip in Thoul with hourly cruises, swimming and group activities.", category: "Back-to-School Season" },
+  "rehla-qasira-qabl-alawda-lildirasah-fi-thol": { title: "A Short Sea Trip Before School: End the Holiday with a Memory", excerpt: "Plan a short sea trip in Thoul before school with swimming, sunset or hourly options.", category: "Seasonal Trips" },
+  "rehlat-bahriya-fi-thol-september-2026": { title: "Sea Trips in Thoul September 2026: Packages and Ideas", excerpt: "Explore current Sewar Marine trip packages, listed prices and booking ideas for September 2026.", category: "Prices & Offers" },
+  "baqat-sewar-fi-mowsem-alawda-lildirasah": { title: "Sewar Marine Back-to-School Packages: Choose Your Experience", excerpt: "Compare swimming, fishing, dolphins, hourly cruises, parties and VIP packages.", category: "Our Packages" },
+  "rehla-sibaha-fi-thol-liotlat-nihayat-alusbou": { title: "Weekend Swimming Trip in Thoul: A Family Day Away", excerpt: "Plan a weekend swimming and relaxation trip in Thoul with Sewar Marine.", category: "Our Packages" },
+  "sayd-fi-thol-mawsim-alawda-lildirasah": { title: "Fishing in Thoul During Back-to-School Season", excerpt: "Choose the right fishing duration and equipment for a weekend fishing trip in Thoul.", category: "Fishing Adventures" },
+  "mushahadat-aldalafin-fi-thol-nihayat-alusbou": { title: "Weekend Dolphin Watching in Thoul: A Morning Trip", excerpt: "Plan a three-hour morning dolphin-watching experience in Thoul with Sewar Marine.", category: "Sea Experiences" },
+  "rehlat-bahriya-bilsaa-fi-mawsim-almadaris": { title: "Hourly Sea Trips in Thoul When School Starts", excerpt: "Enjoy the sea without taking a full day through flexible hourly cruises in Thoul.", category: "Our Packages" },
+  "hafla-bahriya-qabl-almadaris-fi-thol": { title: "A Sea Party Before School Starts in Thoul", excerpt: "Plan a private end-of-holiday sea party with decoration, cake and privacy.", category: "Special Occasions" },
 };
 
 export function postText(locale: Locale, post: BlogPost, field: keyof BlogI18nFields): string {
