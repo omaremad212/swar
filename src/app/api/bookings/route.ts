@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { addBooking, getBookings, updateBooking, deleteBooking, type Booking } from "@/lib/store";
 import { deriveDuration, bookingDuration } from "@/lib/packages";
+import { applyPromoCode, getPromoPercentage, normalizePromoCode } from "@/lib/promotions";
 
 export const dynamic = "force-dynamic";
 
@@ -139,6 +140,28 @@ export async function POST(req: Request) {
   }
 
   const departTime = String(body.departTime || "").trim();
+  const rawPromoCode = String(body.promoCode || "").trim();
+  const promoCode = normalizePromoCode(rawPromoCode);
+  const promoPct = rawPromoCode ? getPromoPercentage(promoCode) : 0;
+
+  if (rawPromoCode && promoPct === 0) {
+    return NextResponse.json({ error: "كود الخصم غير صحيح" }, { status: 422 });
+  }
+
+  let total = Number(body.total) || 0;
+  let amountDue = Number(body.amountDue) || total;
+  let deposit = Number(body.deposit) || 0;
+
+  if (promoPct > 0) {
+    const priceBeforePromo = Number(body.priceBeforePromo);
+    if (!Number.isFinite(priceBeforePromo) || priceBeforePromo <= 0) {
+      return NextResponse.json({ error: "تعذّر احتساب الخصم" }, { status: 422 });
+    }
+    total = applyPromoCode(priceBeforePromo, promoCode).total;
+    const isDeposit = body.payMethod === "bank" && body.payType === "deposit";
+    amountDue = isDeposit ? Math.ceil(total / 2) : total;
+    deposit = isDeposit ? amountDue : 0;
+  }
 
   // ── Time-range conflict check ───────────────────────────────────────────────
   // Trips must not overlap including a 1-hour cleaning buffer after each trip.
@@ -215,11 +238,11 @@ export async function POST(req: Request) {
     notes: String(body.notes || ""),
     payMethod: (["bank","online","pos","cash"].includes(String(body.payMethod)) ? body.payMethod : "bank") as Booking["payMethod"],
     payType: body.payType === "deposit" ? "deposit" : "full",
-    deposit: Number(body.deposit) || 0,
-    amountDue: Number(body.amountDue) || Number(body.total) || 0,
+    deposit,
+    amountDue,
     paid: Number(body.paid) || 0,
-    promo: String(body.promo || ""),
-    total: Number(body.total) || 0,
+    promo: promoPct > 0 ? `${promoCode} (${promoPct}%)` : "",
+    total,
     status: "pending",
   };
 
@@ -232,7 +255,7 @@ export async function POST(req: Request) {
   // await email so Vercel doesn't kill the function before it completes
   await sendBookingNotification(booking);
 
-  return NextResponse.json({ ok: true, id: booking.id });
+  return NextResponse.json({ ok: true, id: booking.id, total: booking.total, amountDue: booking.amountDue });
 }
 
 export async function GET(req: Request) {

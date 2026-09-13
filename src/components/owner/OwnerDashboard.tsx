@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Booking } from "@/lib/store";
 import { bookingDuration } from "@/lib/packages";
+import { calculatePromoDiscount, getPromoPercentage, normalizePromoCode } from "@/lib/promotions";
 import TripSchedule, { fmt12h } from "@/components/dashboard/TripSchedule";
 
 function thisMonth() {
@@ -91,6 +92,9 @@ function QuickBookingForm({ password, onDone, user = "owner" }: { password: stri
   const [endTime, setEndTime] = useState("13:00");
   const [price, setPrice] = useState("");
   const [paid, setPaid] = useState("");
+  const [promoCode, setPromoCode] = useState("");
+  const [promoPct, setPromoPct] = useState(0);
+  const [promoMsg, setPromoMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [payMethod, setPayMethod] = useState<"bank" | "online" | "pos" | "cash">("bank");
   const [persons, setPersons] = useState(2);
   const [notes, setNotes] = useState("");
@@ -103,6 +107,22 @@ function QuickBookingForm({ password, onDone, user = "owner" }: { password: stri
   const startH = toH(startTime);
   const endH = startH + durationHours;
   const blockedEndH = endH + 1;
+  const priceBeforePromo = Math.max(0, Number(price) || 0);
+  const promoDiscount = calculatePromoDiscount(priceBeforePromo, promoPct);
+  const total = Math.max(0, priceBeforePromo - promoDiscount);
+
+  function applyPromo() {
+    const code = normalizePromoCode(promoCode);
+    const percentage = getPromoPercentage(code);
+    if (percentage > 0) {
+      setPromoCode(code);
+      setPromoPct(percentage);
+      setPromoMsg({ ok: true, text: `تم تطبيق كود ${code} — خصم ${percentage}%` });
+      return;
+    }
+    setPromoPct(0);
+    setPromoMsg({ ok: false, text: "كود الخصم غير صحيح" });
+  }
 
   async function submit() {
     setError("");
@@ -122,8 +142,10 @@ function QuickBookingForm({ password, onDone, user = "owner" }: { password: stri
           durationHours,
           name: name.trim(), phone: phone.trim(), notes: notes.trim(),
           payMethod, payType: "full", deposit: 0,
-          total: Number(price), amountDue: Number(price),
-          paid: Number(paid) || 0, promo: "",
+          total, amountDue: total,
+          paid: Number(paid) || 0,
+          promoCode: promoPct ? normalizePromoCode(promoCode) : "",
+          priceBeforePromo,
           status,
         }),
       });
@@ -185,7 +207,7 @@ function QuickBookingForm({ password, onDone, user = "owner" }: { password: stri
       )}
 
       <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <label className="ow-block"><span className="ow-label">السعر الإجمالي (ريال)</span>
+        <label className="ow-block"><span className="ow-label">السعر قبل الخصم (ريال)</span>
           <input type="number" min={0} value={price} onChange={(e) => setPrice(e.target.value)} placeholder="0" className="ow-in" />
         </label>
         <label className="ow-block"><span className="ow-label">المبلغ المدفوع (ريال)</span>
@@ -196,13 +218,31 @@ function QuickBookingForm({ password, onDone, user = "owner" }: { password: stri
             type="text"
             readOnly
             tabIndex={-1}
-            value={`${Math.max(0, (Number(price) || 0) - (Number(paid) || 0)).toLocaleString("ar-SA")} ريال`}
-            className={`ow-in cursor-default font-extrabold ${Math.max(0, (Number(price) || 0) - (Number(paid) || 0)) > 0 ? "ow-remaining-due" : "ow-remaining-paid"}`}
+            value={`${Math.max(0, total - (Number(paid) || 0)).toLocaleString("ar-SA")} ريال`}
+            className={`ow-in cursor-default font-extrabold ${Math.max(0, total - (Number(paid) || 0)) > 0 ? "ow-remaining-due" : "ow-remaining-paid"}`}
           />
         </label>
         <label className="ow-block"><span className="ow-label">عدد الأشخاص</span>
           <input type="number" min={1} max={20} value={persons} onChange={(e) => setPersons(+e.target.value)} className="ow-in" />
         </label>
+      </div>
+
+      <div className="mt-3">
+        <span className="ow-label">كود الخصم (اختياري)</span>
+        <div className="flex gap-2">
+          <input
+            value={promoCode}
+            onChange={(e) => { setPromoCode(e.target.value); setPromoPct(0); setPromoMsg(null); }}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); applyPromo(); } }}
+            placeholder="أدخل كود الخصم"
+            className="ow-in flex-1 text-center font-extrabold uppercase tracking-widest"
+            dir="ltr"
+          />
+          <button type="button" onClick={applyPromo} className="rounded-xl bg-teal-700 px-6 text-sm font-bold text-white transition-opacity hover:opacity-85">
+            تطبيق
+          </button>
+        </div>
+        {promoMsg && <p className={`mt-1.5 text-xs font-bold ${promoMsg.ok ? "text-emerald-600" : "text-red-600"}`}>{promoMsg.text}</p>}
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
@@ -227,8 +267,11 @@ function QuickBookingForm({ password, onDone, user = "owner" }: { password: stri
       </label>
 
       <div className="mt-4 flex items-center justify-between rounded-2xl bg-slate-800 px-5 py-4 text-white">
-        <span className="text-xs text-white/60">إجمالي الرحلة</span>
-        <span className="text-2xl font-extrabold text-amber-400">{price ? Number(price).toLocaleString() : "—"} <span className="text-sm font-normal text-white/60">ريال</span></span>
+        <div>
+          <span className="text-xs text-white/60">إجمالي الرحلة بعد الخصم</span>
+          {promoDiscount > 0 && <p className="mt-1 text-xs font-semibold text-emerald-300">خصم {promoDiscount.toLocaleString("ar-SA")} ريال ({promoPct}%)</p>}
+        </div>
+        <span className="text-2xl font-extrabold text-amber-400">{price ? total.toLocaleString("ar-SA") : "—"} <span className="text-sm font-normal text-white/60">ريال</span></span>
       </div>
 
       {error && <p className="mt-3 rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">{error}</p>}

@@ -15,6 +15,7 @@ import {
 import { useI18n, pick } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n-core";
 import { useSettings } from "@/lib/settings";
+import { getPromoPercentage, normalizePromoCode } from "@/lib/promotions";
 
 // Packages that can depart any hour of the day
 const ALLDAY_PKG_IDS = new Set(["fish", "hour", "party", "vip"]);
@@ -49,7 +50,6 @@ function isWeekend(dateStr: string) {
   return d === 4 || d === 5 || d === 6;
 }
 
-const PROMO_CODES: Record<string, number> = { S10: 10 };
 const CANCEL_POLICY = {
   ar: "في حال إلغاء الرحلة من قِبَل العميل لأي سبب، لا يُرد المبلغ المحوَّل ولا يُستبدل. في حال وجود مشكلة من طرفنا، يُرد المبلغ كاملاً.",
   en: "If the client cancels for any reason, the transferred amount is non-refundable and non-exchangeable. If the issue is on our end, a full refund is provided.",
@@ -192,10 +192,12 @@ export default function BookingModal({ pkg, image, onClose }: { pkg: Pkg | null;
   }, [pkg, qty, toggles, dayTypeExtra]);
 
   function applyPromo() {
-    const code = promoCode.trim().toUpperCase();
-    if (PROMO_CODES[code] !== undefined) {
-      setPromoPct(PROMO_CODES[code]);
-      setPromoMsg({ ok: true, text: pick(locale, `تم تطبيق الخصم! خصم ${PROMO_CODES[code]}% إضافي`, `Discount applied! You received an extra ${PROMO_CODES[code]}% off.`) });
+    const code = normalizePromoCode(promoCode);
+    const percentage = getPromoPercentage(code);
+    if (percentage > 0) {
+      setPromoCode(code);
+      setPromoPct(percentage);
+      setPromoMsg({ ok: true, text: pick(locale, `تم تطبيق الخصم! خصم ${percentage}% إضافي`, `Discount applied! You received an extra ${percentage}% off.`) });
     } else {
       setPromoPct(0);
       setPromoMsg({ ok: false, text: pick(locale, "كود الخصم غير صحيح", "Invalid promo code") });
@@ -221,11 +223,14 @@ export default function BookingModal({ pkg, image, onClose }: { pkg: Pkg | null;
           name: name.trim(), phone: phone.trim(), notes: notes.trim(),
           payMethod, payType: payMethod === "bank" ? payType : "full",
           deposit: payMethod === "bank" && payType === "deposit" ? deposit : 0,
-          total, amountDue, promo: promoPct ? `${promoCode.toUpperCase()} (${promoPct}%)` : "",
+          total, amountDue,
+          promoCode: promoPct ? normalizePromoCode(promoCode) : "",
+          priceBeforePromo: afterSeason,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(locale === "en" ? "Unable to complete the booking" : data.error || "تعذّر إتمام الحجز");
+      const verifiedAmountDue = Number(data.amountDue) || amountDue;
 
       // online payment → create Moyasar invoice and redirect to hosted payment page
       if (payMethod === "online") {
@@ -234,7 +239,7 @@ export default function BookingModal({ pkg, image, onClose }: { pkg: Pkg | null;
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             bookingId: data.id,
-            amount: amountDue,
+            amount: verifiedAmountDue,
             description: pick(locale, `حجز سوار البحرية — ${pkg.title}`, `Sewar Marine booking — ${pkgText(locale, pkg, "title")}`),
           }),
         });
@@ -389,7 +394,7 @@ export default function BookingModal({ pkg, image, onClose }: { pkg: Pkg | null;
                 {/* discount code */}
                 <Field label={pick(locale, "كود الخصم (اختياري)", "Promo code (optional)")}>
                   <div className="flex gap-2">
-                    <input value={promoCode} onChange={(e) => setPromoCode(e.target.value)} placeholder={pick(locale, "أدخل الكود", "Enter code")} className="sw-in flex-1 text-center font-bold uppercase tracking-widest" style={{ direction: "ltr" }} />
+                    <input value={promoCode} onChange={(e) => { setPromoCode(e.target.value); setPromoPct(0); setPromoMsg(null); }} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); applyPromo(); } }} placeholder={pick(locale, "أدخل الكود", "Enter code")} className="sw-in flex-1 text-center font-bold uppercase tracking-widest" style={{ direction: "ltr" }} />
                     <button type="button" onClick={applyPromo} className="rounded-xl bg-navy-900 px-5 font-bold text-white">{pick(locale, "تطبيق", "Apply")}</button>
                   </div>
                 </Field>
