@@ -1,5 +1,6 @@
 import "server-only";
 import { BLOG_POSTS, type BlogPost } from "./blog";
+import { SERVICE_POSTS } from "./service-articles";
 import { PACKAGES, type Pkg } from "./packages";
 import { mergeSettings, type SiteSettings } from "./settings-core";
 import { getContent, setContent } from "./store";
@@ -29,7 +30,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   const hiddenSet = new Set(hidden);
   const seen = new Set<string>();
   const out: BlogPost[] = [];
-  for (const p of [...dyn, ...BLOG_POSTS]) {
+  for (const p of [...dyn, ...SERVICE_POSTS, ...BLOG_POSTS]) {
     if (seen.has(p.slug) || hiddenSet.has(p.slug)) continue;
     seen.add(p.slug);
     out.push(p);
@@ -55,7 +56,7 @@ export async function deletePost(slug: string): Promise<void> {
     await setContent(POSTS_KEY, dyn.filter((p) => p.slug !== slug));
   }
   // if it also (or only) exists as a static seed post, hide it
-  if (BLOG_POSTS.some((p) => p.slug === slug)) {
+  if ([...SERVICE_POSTS, ...BLOG_POSTS].some((p) => p.slug === slug)) {
     const hidden = await getHiddenSlugs();
     if (!hidden.includes(slug)) await setContent(HIDDEN_KEY, [...hidden, slug]);
   }

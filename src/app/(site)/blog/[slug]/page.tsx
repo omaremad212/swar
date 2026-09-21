@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { BLOG_POSTS, postText } from "@/lib/blog";
+import { SERVICE_POSTS } from "@/lib/service-articles";
 import { ALL_PHOTOS } from "@/components/home/images";
 import { SITE_URL as SITE } from "@/lib/site";
 import { tt } from "@/lib/i18n-core";
@@ -10,7 +11,7 @@ import { getServerLocale } from "@/lib/locale-server";
 import { getPostBySlug } from "@/lib/content-server";
 
 export function generateStaticParams() {
-  return BLOG_POSTS.map((p) => ({ slug: p.slug }));
+  return [...SERVICE_POSTS, ...BLOG_POSTS].map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
